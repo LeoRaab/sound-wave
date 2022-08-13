@@ -1,6 +1,7 @@
 import { ThreeElements, useFrame } from '@react-three/fiber';
 import { useRef, useMemo } from 'react';
-import THREE, { InstancedMesh } from 'three';
+import * as THREE from 'three';
+import { InstancedMesh } from 'three';
 
 const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
   return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta);
@@ -28,6 +29,7 @@ const Dots = () => {
     const distances = positions.map((pos) => pos.length());
     return { vec, transform, positions, distances };
   }, []);
+
   useFrame(({ clock }) => {
     for (let i = 0; i < 10000; ++i) {
       const t = clock.elapsedTime - distances[i] / 80;
@@ -39,6 +41,7 @@ const Dots = () => {
     }
     meshRef.current!.instanceMatrix!.needsUpdate = true;
   });
+
   return (
     <instancedMesh ref={meshRef} args={[undefined, undefined, 10000]}>
       <circleBufferGeometry args={[0.15]} />
