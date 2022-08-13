@@ -5,7 +5,7 @@ const App = () => {
   return (
     <Canvas orthographic camera={{ zoom: 20 }}>
       <color attach="background" args={['black']} />
-      <Dots />
+      
     </Canvas>
   );
 };
