@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import useTouch from '../hooks/use-touch';
-import soundFile from '../../assets/sounds/sound.mp3';
+import soundFile from '../../assets/sounds/bounce.mp3';
+import calcLowPassFreq from '../util/calc-low-pass-freq';
 
 const Sound = () => {
   const { camera } = useThree();
@@ -25,11 +26,9 @@ const Sound = () => {
     }
 
     if (audio.current.isPlaying && isTouched) {
-      if (pointer.x > 0.1) {
-        lowPassFilter.frequency.value = 532;
-      } else {
-        lowPassFilter.frequency.value = 10000;
-      }
+      const { x, y } = pointer;
+      const lowPassFreq = calcLowPassFreq(x, y);
+      lowPassFilter.frequency.value = lowPassFreq;
     }
 
     if (audio.current.isPlaying && !isTouched) {
