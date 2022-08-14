@@ -14,10 +14,10 @@ const UIOverlay = ({ isPlayOn, onPlayClick, onDetuneClick, onLowPassClick }: UIO
       <button className="btn-control" onClick={onPlayClick}>
         {isPlayOn ? 'pause' : 'play'}
       </button>
-      <p>Detune</p>
+      <p className="noselect">Detune</p>
       <input type="checkbox" id="detune" onClick={onDetuneClick} />
       <label htmlFor="detune">Detune</label>
-      <p>LowPass</p>
+      <p className="noselect">LowPass</p>
       <input type="checkbox" id="lowpass" onClick={onLowPassClick}/>
       <label htmlFor="lowpass">Lowpass</label>
     </div>
