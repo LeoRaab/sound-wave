@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import useTouch from '../hooks/use-touch';
-import soundFile from '../../assets/sounds/bounce.mp3';
+import soundFile from '../../assets/sounds/the-podcast.mp3';
 import calcLowPassFreq from '../util/calc-low-pass-freq';
 
 type SoundProps = {
