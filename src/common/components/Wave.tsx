@@ -1,5 +1,5 @@
-import { useFrame } from '@react-three/fiber';
-import { useRef, useMemo } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
+import { useRef, useMemo, useLayoutEffect, useState } from 'react';
 import * as THREE from 'three';
 import { InstancedMesh } from 'three';
 
@@ -7,8 +7,11 @@ const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
   return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta);
 };
 
-const Dots = () => {
+const Wave = () => {
+  const { scene, raycaster, pointer, camera, mouse } = useThree();
+  
   const meshRef = useRef<InstancedMesh>(null);
+
   const { vec, transform, positions, distances } = useMemo(() => {
     const vec = new THREE.Vector3();
     const transform = new THREE.Matrix4();
@@ -30,24 +33,38 @@ const Dots = () => {
     return { vec, transform, positions, distances };
   }, []);
 
-  useFrame(({ clock }) => {
+  // useFrame(({ clock }) => {
+  //   for (let i = 0; i < 10000; ++i) {
+  //     const t = clock.elapsedTime - distances[i] / 80;
+  //     const wave = roundedSquareWave(t, 0.1, 1, 1 / 4);
+  //     const scale = 1 + wave * 0.3;
+  //     vec.copy(positions[i]).multiplyScalar(scale);
+  //     transform.setPosition(vec);
+  //     meshRef.current!.setMatrixAt(i, transform);
+  //   }
+  //   meshRef.current!.instanceMatrix!.needsUpdate = true;
+  // });
+
+  useFrame(({ raycaster, pointer, camera, scene }) => {
     for (let i = 0; i < 10000; ++i) {
-      const t = clock.elapsedTime - distances[i] / 80;
-      const wave = roundedSquareWave(t, 0.1, 1, 1 / 4);
-      const scale = 1 + wave * 0.3;
-      vec.copy(positions[i]).multiplyScalar(scale);
+      vec.copy(positions[i]);
       transform.setPosition(vec);
       meshRef.current!.setMatrixAt(i, transform);
     }
-    meshRef.current!.instanceMatrix!.needsUpdate = true;
   });
 
+  const onPointerMove = () => {
+   
+  };
+
   return (
-    <instancedMesh ref={meshRef} args={[undefined, undefined, 10000]}>
-      <circleBufferGeometry args={[0.15]} />
-      <meshBasicMaterial />
-    </instancedMesh>
+    <group onPointerMove={onPointerMove}>
+      <instancedMesh ref={meshRef} args={[undefined, undefined, 10000]}>
+        <circleBufferGeometry args={[0.15]} />
+        <meshBasicMaterial />
+      </instancedMesh>
+    </group>
   );
 };
 
-export default Dots;
+export default Wave;
