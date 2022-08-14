@@ -3,10 +3,7 @@ import { SpringValue } from '@react-spring/three';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { InstancedMesh } from 'three';
-
-const roundedSquareWave = (t: number, delta: number, a: number, f: number) => {
-  return ((2 * a) / Math.PI) * Math.atan(Math.sin(2 * Math.PI * t * f) / delta);
-};
+import roundedSquareWave from '../util/rounded-square-wave';
 
 type WaveProps = {
   ticksSpring: SpringValue<number>;
