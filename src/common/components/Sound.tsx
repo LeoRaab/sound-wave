@@ -5,7 +5,13 @@ import useTouch from '../hooks/use-touch';
 import soundFile from '../../assets/sounds/bounce.mp3';
 import calcLowPassFreq from '../util/calc-low-pass-freq';
 
-const Sound = () => {
+type SoundProps = {
+  isPlayOn: boolean;
+  isDetuneOn: boolean;
+  isLowPassOn: boolean;
+}
+
+const Sound = ({isPlayOn, isDetuneOn, isLowPassOn}: SoundProps) => {
   const { camera } = useThree();
   const { isTouched } = useTouch();
 
@@ -19,20 +25,28 @@ const Sound = () => {
   audio.current.setFilter(lowPassFilter);
 
   useFrame(({ pointer }) => {
-    if (buffer && isTouched && !audio.current.isPlaying) {
+    if (buffer && isPlayOn && !audio.current.isPlaying) {
       audio.current.setBuffer(buffer);
       audio.current.setLoop(true);
       audio.current.play();
     }
 
-    if (audio.current.isPlaying && isTouched) {
-      const { x, y } = pointer;
-      const lowPassFreq = calcLowPassFreq(x, y);
-      lowPassFilter.frequency.value = lowPassFreq;
+    if (audio.current.isPlaying && isTouched && isDetuneOn) {
+      audio.current.setDetune(-1000);
     }
 
+    if (audio.current.isPlaying && isTouched && isLowPassOn) {
+      const { x, y } = pointer;
+      const lowPassFreq = calcLowPassFreq(x, y);
+      lowPassFilter.frequency.value = lowPassFreq;      
+    }    
+
     if (audio.current.isPlaying && !isTouched) {
-      audio.current.pause();
+      audio.current.setDetune(0);
+    }
+
+    if (audio.current.isPlaying && !isPlayOn) {
+       audio.current.pause();
     }
   });
 
