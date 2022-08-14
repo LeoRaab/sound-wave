@@ -1,10 +1,19 @@
+/**
+ * TODO: use Context + Reducer for state handling
+ */
+
 import { Canvas } from '@react-three/fiber';
 import Wave from './common/components/Wave';
 import Sound from './common/components/Sound';
 import { useState } from 'react';
 import { useSpring } from '@react-spring/three';
+import UIOverlay from './common/components/UIOverlay';
 
 const App = () => {
+  const [isPlayOn, setIsPlayOn] = useState<boolean>(false);
+  const [isDetuneOn, setIsDetuneOn] = useState<boolean>(false);
+  const [isLowPassOn, setIsLowPassOn] = useState<boolean>(false);
+
   const [ticks, setTicks] = useState(0);
   const { ticksSpring, clickSpring } = useSpring({
     ticksSpring: ticks, // Springy tick value (each click / release is a tick)
@@ -29,11 +38,19 @@ const App = () => {
   };
 
   return (
-    <Canvas orthographic camera={{ zoom: 20 }} resize={{ polyfill: ResizeObserver }} {...bind}>
-      <color attach="background" args={['black']} />
-      <Wave ticksSpring={ticksSpring} clickSpring={clickSpring} />
-      <Sound />
-    </Canvas>
+    <>
+      <Canvas orthographic camera={{ zoom: 20 }} resize={{ polyfill: ResizeObserver }} {...bind}>
+        <color attach="background" args={['black']} />
+        <Wave ticksSpring={ticksSpring} clickSpring={clickSpring} />
+        <Sound isPlayOn={isPlayOn} isDetuneOn={isDetuneOn} isLowPassOn={isLowPassOn} />
+      </Canvas>
+      <UIOverlay
+        isPlayOn={isPlayOn}
+        onPlayClick={() => setIsPlayOn(!isPlayOn)}
+        onDetuneClick={() => setIsDetuneOn(!isDetuneOn)}
+        onLowPassClick={() => setIsLowPassOn(!isLowPassOn)}
+      />
+    </>
   );
 };
 
