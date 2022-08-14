@@ -26,7 +26,7 @@ const Sound = () => {
 
     if (audio.current.isPlaying && isTouched) {
       if (pointer.x > 0.1) {
-        lowPassFilter.frequency.value = 132;
+        lowPassFilter.frequency.value = 532;
       } else {
         lowPassFilter.frequency.value = 10000;
       }
