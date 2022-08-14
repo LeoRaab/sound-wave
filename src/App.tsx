@@ -14,6 +14,10 @@ const App = () => {
   const [isDetuneOn, setIsDetuneOn] = useState<boolean>(false);
   const [isLowPassOn, setIsLowPassOn] = useState<boolean>(false);
 
+  const isMobile = window.matchMedia("only screen and (max-width: 480px)").matches;
+
+  const zoomLevel = isMobile ? 9 : 20;
+
   const [ticks, setTicks] = useState(0);
   const { ticksSpring, clickSpring } = useSpring({
     ticksSpring: ticks, // Springy tick value (each click / release is a tick)
@@ -39,7 +43,7 @@ const App = () => {
 
   return (
     <>
-      <Canvas orthographic camera={{ zoom: 20 }} resize={{ polyfill: ResizeObserver }} {...bind}>
+      <Canvas orthographic camera={{ zoom: zoomLevel }} resize={{ polyfill: ResizeObserver }} {...bind}>
         <color attach="background" args={['black']} />
         <Wave ticksSpring={ticksSpring} clickSpring={clickSpring} />
         <Sound isPlayOn={isPlayOn} isDetuneOn={isDetuneOn} isLowPassOn={isLowPassOn} />
